@@ -12,7 +12,7 @@ while(<IN>){
 }close IN;
 
 my %hash;
-open IN,"/jdfssz1/ST_SUPERCELLS/PUB/scRNA/software/miniconda3/envs/cyclone/bin/samtools view $file|";
+open IN,"samtools view $file|";
 # open IN,"$file";
 while(<IN>){
     chomp;
