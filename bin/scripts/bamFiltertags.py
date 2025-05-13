@@ -52,7 +52,7 @@ def process_bam(input_bam_path, output_bam_path, best_barcode_dict, sample_name)
                 DB = best_barcode_dict[old_barcode][1]
                 i.set_tag("CB", CB)
                 i.set_tag("DB", DB)
-                i.set_tag("NB", sample_name)
+                i.set_tag("NB", "{}_{}".format(sample_name,DB))
                 outsam.write(i)
         except KeyError:
             continue
