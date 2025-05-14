@@ -78,7 +78,7 @@ def main():
     best_barcode_dict = load_data(args.barcode_path, args.beads_path, args.best_barcode_path)
 
     # Process the BAM file
-    process_bam(args.input_bam_path, args.output_bam_path, args.best_barcode_dict, args.sample_name)
+    process_bam(args.input_bam_path, args.output_bam_path, best_barcode_dict, args.sample_name)
 
 if __name__ == "__main__":
     main()
