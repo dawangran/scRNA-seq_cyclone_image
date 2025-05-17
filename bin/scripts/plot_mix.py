@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import argparse
+from matplotlib.lines import Line2D
+
 
 def plot_human_mouse_scatter(file_path, x_col='GRCh38_UB', y_col='mm10_UB', label_col='lable', figsize=(8, 7), style='seaborn-v0_8-whitegrid', save_path=None, threshold=0.8):
     # 读取数据
@@ -14,8 +16,11 @@ def plot_human_mouse_scatter(file_path, x_col='GRCh38_UB', y_col='mm10_UB', labe
     data.loc[((data[x_col] / data['Total']) > threshold), label_col] = "Human"
     data.loc[((data[y_col] / data['Total']) > threshold), label_col] = "Mouse"
     
-    # 统计标签分布
-    print(data[label_col].value_counts())
+    # 统计每个标签的数量
+    label_counts = data['lable'].value_counts()
+    
+    # 计算总数据量
+    total_count = data.shape[0]
     
     # 设置图形主题
     plt.style.use(style)
@@ -30,17 +35,16 @@ def plot_human_mouse_scatter(file_path, x_col='GRCh38_UB', y_col='mm10_UB', labe
     plt.figure(figsize=figsize)
     scatter = plt.scatter(x=data[x_col], y=data[y_col], c=colors, s=50, alpha=0.5)
     
-    # 计算 Mix 标签的比例
-    rate = data[data[label_col] == "Mix"].shape[0] / data.shape[0]
-    percentage = "{:.2%}".format(rate)
-    
     # 美化图像
-    plt.xlabel('Human', fontsize=14, fontweight='bold')
-    plt.ylabel('Mouse', fontsize=14, fontweight='bold')
-    plt.title(f'Human vs. Mouse Scatter Plot: {percentage}', fontsize=16, fontweight='bold')
-    
-    # 添加网格线
+    plt.xlabel('Human UMI counts in per cell', fontsize=14, fontweight='bold')
+    plt.ylabel('Mouse UMI counts in per cell', fontsize=14, fontweight='bold')
+
+   # 添加网格线
     plt.grid(True, linestyle='--', alpha=0.3)
+
+        # 添加自定义图例
+    handles = [Line2D([0], [0], marker='o', color='w', label=f"{label} : {label_counts[label]} ({label_counts[label]/total_count:.2%})", markersize=10, markerfacecolor=color) for label, color in color_map.items()]
+    plt.legend(handles=handles, fontsize=12)
     
     # 保存图像
     if save_path:
